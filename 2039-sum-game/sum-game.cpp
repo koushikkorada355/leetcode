@@ -29,9 +29,6 @@ public:
         if(abs(left - right) % 2){
             return true;
         }
-        cout << left << " " << right << " ";
-        cout << sum1 << " " << sum2 << " ";
-        cout << abs(sum1 - sum2) << " ";
         return !((abs(sum1 - sum2) % 9 == 0)
             && (9 * (abs(left - right) / 2) == abs(sum1 - sum2)));
     }
