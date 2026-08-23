@@ -59,7 +59,6 @@ public:
                 cnt = removefactors(nums[l],cnt,freq,isPrime);
                 l++;
             }
-            cout << cnt << " ";
             ans = max(ans,r - l + 1);
         }   
         return ans;
