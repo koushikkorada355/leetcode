@@ -26,7 +26,6 @@ public:
         for(int i = 0;i < n;i++){
             nums[i] = nums[i] == 0 ? -1 : nums[i] < 0;
         }
-        int res = solve(nums);
-        return max(res,solve(nums));
+        return solve(nums);
     }
 };
