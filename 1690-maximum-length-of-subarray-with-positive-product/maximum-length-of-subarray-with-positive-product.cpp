@@ -27,7 +27,6 @@ public:
             nums[i] = nums[i] == 0 ? -1 : nums[i] < 0;
         }
         int res = solve(nums);
-        reverse(nums.begin(),nums.end());
         return max(res,solve(nums));
     }
 };
