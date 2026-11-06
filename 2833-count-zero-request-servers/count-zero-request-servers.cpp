@@ -1,35 +1,52 @@
-#include <bits/stdc++.h>
-using namespace std;
 class Solution {
 public:
     vector<int> countServers(int n, vector<vector<int>>& logs, int x, vector<int>& queries) {
-        sort(logs.begin(),logs.end());
-        int endTime = 0;
-        for(int i = 0;i < logs.size();i++){
-            endTime = max(endTime,logs[i][1]);
+
+        sort(logs.begin(), logs.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[1] < b[1];
+        });
+
+        int m = queries.size();
+
+        vector<pair<int, int>> q;
+        for (int i = 0; i < m; i++) {
+            q.push_back({queries[i], i});
         }
 
-        for(int q : queries){
-            endTime = max(endTime,q);
-        }
-        vector<int> prefix(endTime + x + 2,0);
+        sort(q.begin(), q.end());
 
-        for(int i = 0;i < logs.size();i++){
-            int time = logs[i][1];
-            int server  = logs[i][0];
-            prefix[time]++;
-            int end = i + 1 < logs.size() && server == logs[i + 1][0] ? min(time + x + 1,logs[i + 1][1]) : time + x + 1;
-            prefix[end]--;
+        vector<int> freq(n + 1, 0);
+        vector<int> ans(m);
+
+        int left = 0, right = 0;
+        int active = 0;
+
+        for (auto [t, idx] : q) {
+
+            while (right < logs.size() && logs[right][1] <= t) {
+                int server = logs[right][0];
+
+                if (freq[server] == 0)
+                    active++;
+
+                freq[server]++;
+                right++;
+            }
+
+            while (left < right && logs[left][1] < t - x) {
+                int server = logs[left][0];
+
+                freq[server]--;
+
+                if (freq[server] == 0)
+                    active--;
+
+                left++;
+            }
+
+            ans[idx] = n - active;
         }
-        int cnt = 0;
-        for(int i = 0;i < prefix.size();i++){
-            cnt += prefix[i];
-            prefix[i] = cnt;
-        }
-        vector<int> res;
-        for(int q : queries){
-            res.push_back(n - prefix[q]);
-        }
-        return res;
+
+        return ans;
     }
 };
